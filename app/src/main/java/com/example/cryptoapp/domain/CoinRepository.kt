@@ -8,4 +8,6 @@ interface CoinRepository {
 
     fun getCoinInfo(fSym: String): LiveData<CoinInfo>
 
+    suspend fun loadData()
+
 }

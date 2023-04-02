@@ -6,9 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.cryptoapp.R
-import com.example.cryptoapp.data.model.CoinPriceInfo
+import com.example.cryptoapp.data.network.model.CoinInfoDto
+import com.example.cryptoapp.domain.CoinInfo
+import com.example.cryptoapp.utils.convertTimestampToTime
 import com.squareup.picasso.Picasso
 
 class CoinDetailActivity : AppCompatActivity() {
@@ -26,14 +29,14 @@ class CoinDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_coin_detail)
-        viewModel = ViewModelProviders.of(this)[CoinViewModel::class.java]
+        viewModel = ViewModelProvider(this)[CoinViewModel::class.java]
         initViews()
         if (!intent.hasExtra(EXTRA_FROM_SYMBOL)) {
             finish()
             return
         }
-        val fromSymbol = intent.getStringExtra(EXTRA_FROM_SYMBOL) ?: ""
-        viewModel.getDetailsFor(fromSymbol).observe(this) {
+        val fromSymbol = intent.getStringExtra(EXTRA_FROM_SYMBOL) ?: EMPTY_SYMBOL
+        viewModel.getDetailInfo(fromSymbol).observe(this) {
             setValues(it)
         }
     }
@@ -48,24 +51,26 @@ class CoinDetailActivity : AppCompatActivity() {
         tvTimeOfUpdate = findViewById(R.id.tvTimeOfUpdate)
     }
 
-    private fun setValues(coinPriceInfo: CoinPriceInfo) {
+    private fun setValues(coinInfo: CoinInfo) {
         tvCoinFromSymToSym.text = String.format(
             getString(R.string.card_label),
-            coinPriceInfo.fromSymbol,
-            coinPriceInfo.toSymbol
+            coinInfo.fromSymbol,
+            coinInfo.toSymbol
         )
-        tvPriceValue.text = coinPriceInfo.price.toString()
-        tvMinByDayValue.text = coinPriceInfo.lowday.toString()
-        tvMaxByDayValue.text = coinPriceInfo.highDay.toString()
-        tvLastDealSource.text = coinPriceInfo.lastMarket
-        tvTimeOfUpdate.text = coinPriceInfo.getFormattedTime()
-        Picasso.get().load(coinPriceInfo.getFullImageUrl()).into(ivLogoCoinDetail)
+        tvPriceValue.text = coinInfo.price.toString()
+        tvMinByDayValue.text = coinInfo.lowDay.toString()
+        tvMaxByDayValue.text = coinInfo.highDay.toString()
+        tvLastDealSource.text = coinInfo.lastMarket
+        tvTimeOfUpdate.text = convertTimestampToTime(coinInfo.lastUpdate?.toLong())
+        Picasso.get().load(BASE_iMAGE_URL + coinInfo.imageUrl).into(ivLogoCoinDetail)
 
     }
 
     companion object {
 
         private const val EXTRA_FROM_SYMBOL = "from_symbol"
+        private const val EMPTY_SYMBOL = ""
+        const val BASE_iMAGE_URL = "https:/cryptocompare.com"
 
         fun newIntent(context: Context, fSym: String): Intent {
             return with(Intent(context, CoinDetailActivity::class.java)) {
