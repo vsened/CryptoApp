@@ -1,17 +1,14 @@
 package com.example.cryptoapp.presentation.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cryptoapp.R
-import com.example.cryptoapp.data.network.ApiFactory
+import com.example.cryptoapp.databinding.ItemCoinInfoBinding
 import com.example.cryptoapp.domain.CoinInfo
 import com.squareup.picasso.Picasso
 
-class CoinInfoAdapter : RecyclerView.Adapter<CoinInfoAdapter.CoinInfoViewHolder>() {
+class CoinInfoAdapter : RecyclerView.Adapter<CoinInfoViewHolder>() {
     var items: List<CoinInfo> = listOf()
         set(value) {
             field = value
@@ -20,30 +17,30 @@ class CoinInfoAdapter : RecyclerView.Adapter<CoinInfoAdapter.CoinInfoViewHolder>
     var onCoinItemClickListener: OnCoinItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinInfoViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_coin_info,
+        val binding = ItemCoinInfoBinding.inflate(
+            LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return CoinInfoViewHolder(view)
+        return CoinInfoViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CoinInfoViewHolder, position: Int) {
         val item = items[position]
-        with(holder) {
+        with(holder.binding) {
             with(item) {
                 tvSymbols.text = String.format(
-                    itemView.context.getString(R.string.card_label),
+                    root.context.getString(R.string.card_label),
                     fromSymbol,
                     toSymbol
                 )
                 tvPrice.text = price.toString()
                 tvTimeOfLastUpdate.text = String.format(
-                    itemView.context.getString(R.string.last_update_label),
+                    root.context.getString(R.string.last_update_label),
                     lastUpdate.toString()
                 )
                 Picasso.get().load(imageUrl).into(ivLogoCoin)
-                itemView.setOnClickListener {
+                root.setOnClickListener {
                     onCoinItemClickListener?.onCoinItemClick(this)
                 }
             }
@@ -51,13 +48,6 @@ class CoinInfoAdapter : RecyclerView.Adapter<CoinInfoAdapter.CoinInfoViewHolder>
     }
 
     override fun getItemCount() = items.size
-
-    inner class CoinInfoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val ivLogoCoin: ImageView = itemView.findViewById(R.id.ivLogoCoin)
-        val tvSymbols: TextView = itemView.findViewById(R.id.tvSymbols)
-        val tvPrice: TextView = itemView.findViewById(R.id.tvPrice)
-        val tvTimeOfLastUpdate: TextView = itemView.findViewById(R.id.tvTimeOfLastUpdate)
-    }
 
     interface OnCoinItemClickListener {
         fun onCoinItemClick(coinInfo: CoinInfo)
