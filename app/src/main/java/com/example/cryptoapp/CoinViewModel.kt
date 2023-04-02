@@ -22,8 +22,6 @@ class CoinViewModel(application: Application) : AndroidViewModel(application) {
         loadData()
     }
 
-
-
     private fun loadData() {
         val disposable = ApiFactory.apiService.getTopCoinsInfo()
             .map { it.data?.map { it.coinInfo?.name }?.joinToString(",") }
@@ -39,6 +37,7 @@ class CoinViewModel(application: Application) : AndroidViewModel(application) {
             }, {
                 Log.d("CoinViewModel", it.message.toString())
             })
+        compositeDisposable.add(disposable)
     }
 
     private fun getPriceListFromRawData(rawData: CoinPriceInfoRawData): List<CoinPriceInfo> {
