@@ -2,4 +2,9 @@
     <string name="app_name">CryptoApp</string>
     <string name="last_update_label">Время последнего обновления: %s</string>
     <string name="card_label">%s / %s</string>
+    <string name="price_info_label">Цена:</string>
+    <string name="min_by_day_label">Минимум за день:</string>
+    <string name="max_by_day_label">Максимум за день:</string>
+    <string name="last_deal_label">Последняя сделка:</string>
+    <string name="update_label">Обновленно:</string>
 </resources>

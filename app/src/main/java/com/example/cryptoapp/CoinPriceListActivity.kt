@@ -20,7 +20,8 @@ class CoinPriceListActivity : AppCompatActivity() {
         rvCoinPriceInfo.adapter = adapter
         adapter.onCoinItemClickListener = object: CoinInfoAdapter.OnCoinItemClickListener {
             override fun onCoinItemClick(coinPriceInfo: CoinPriceInfo) {
-                Log.d("CoinPriceListActivity", "Click on $coinPriceInfo")
+                val intent = CoinDetailActivity.newIntent(this@CoinPriceListActivity, coinPriceInfo.fromSymbol)
+                startActivity(intent)
             }
         }
         viewModel = ViewModelProviders.of(this)[CoinViewModel::class.java]
