@@ -2,16 +2,13 @@ package com.example.cryptoapp.presentation
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.example.cryptoapp.R
-import com.example.cryptoapp.data.network.model.CoinInfoDto
 import com.example.cryptoapp.domain.CoinInfo
-import com.example.cryptoapp.utils.convertTimestampToTime
 import com.squareup.picasso.Picasso
 
 class CoinDetailActivity : AppCompatActivity() {
@@ -61,8 +58,8 @@ class CoinDetailActivity : AppCompatActivity() {
         tvMinByDayValue.text = coinInfo.lowDay.toString()
         tvMaxByDayValue.text = coinInfo.highDay.toString()
         tvLastDealSource.text = coinInfo.lastMarket
-        tvTimeOfUpdate.text = convertTimestampToTime(coinInfo.lastUpdate?.toLong())
-        Picasso.get().load(BASE_iMAGE_URL + coinInfo.imageUrl).into(ivLogoCoinDetail)
+        tvTimeOfUpdate.text = coinInfo.lastUpdate.toString()
+        Picasso.get().load(coinInfo.imageUrl).into(ivLogoCoinDetail)
 
     }
 
