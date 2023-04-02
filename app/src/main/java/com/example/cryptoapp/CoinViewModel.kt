@@ -29,7 +29,7 @@ class CoinViewModel(application: Application) : AndroidViewModel(application) {
             .map { getPriceListFromRawData(it) }
             .repeat()
             .retry()
-            .delaySubscription(10, TimeUnit.SECONDS)
+            .delaySubscription(20, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .subscribe({
                 db.coinPriceInfoDao().insertPriceList(it)
