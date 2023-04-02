@@ -22,7 +22,7 @@ class CoinPriceListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        val adapter = CoinInfoAdapter()
+        val adapter = CoinInfoAdapter(this)
         binding.rvCoinPriceList.adapter = adapter
         adapter.onCoinItemClickListener = object: CoinInfoAdapter.OnCoinItemClickListener {
             override fun onCoinItemClick(coinInfo: CoinInfo) {
@@ -35,7 +35,7 @@ class CoinPriceListActivity : AppCompatActivity() {
         }
         viewModel = ViewModelProvider(this)[CoinViewModel::class.java]
         viewModel.coinInfoList.observe(this) {
-            adapter.items = it
+            adapter.submitList(it)
         }
     }
 }
