@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CryptoApp</string>
+    <string name="last_update_label">Время последнего обновления: %s</string>
+    <string name="card_label">%s / %s</string>
 </resources>
