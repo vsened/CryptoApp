@@ -8,18 +8,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cryptoapp.R
 import com.example.cryptoapp.presentation.adapters.CoinInfoAdapter
 import com.example.cryptoapp.data.network.model.CoinInfoDto
+import com.example.cryptoapp.databinding.ActivityCoinPriceListBinding
 import com.example.cryptoapp.domain.CoinInfo
 
 class CoinPriceListActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CoinViewModel
     private lateinit var rvCoinPriceInfo: RecyclerView
+
+    private val binding by lazy {
+        ActivityCoinPriceListBinding.inflate(layoutInflater)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_coin_price_list)
-        rvCoinPriceInfo = findViewById(R.id.rvCoinPriceList)
+        setContentView(binding.root)
         val adapter = CoinInfoAdapter()
-        rvCoinPriceInfo.adapter = adapter
+        binding.rvCoinPriceList.adapter = adapter
         adapter.onCoinItemClickListener = object: CoinInfoAdapter.OnCoinItemClickListener {
             override fun onCoinItemClick(coinInfo: CoinInfo) {
                 val intent = CoinDetailActivity.newIntent(
