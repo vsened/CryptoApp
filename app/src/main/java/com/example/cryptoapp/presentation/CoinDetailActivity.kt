@@ -1,14 +1,14 @@
-package com.example.cryptoapp
+package com.example.cryptoapp.presentation
 
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
-import com.example.cryptoapp.pojo.CoinPriceInfo
+import com.example.cryptoapp.R
+import com.example.cryptoapp.data.model.CoinPriceInfo
 import com.squareup.picasso.Picasso
 
 class CoinDetailActivity : AppCompatActivity() {
