@@ -19,23 +19,43 @@ class CoinPriceListActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityCoinPriceListBinding.inflate(layoutInflater)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val adapter = CoinInfoAdapter(this)
         binding.rvCoinPriceList.adapter = adapter
-        adapter.onCoinItemClickListener = object: CoinInfoAdapter.OnCoinItemClickListener {
+        adapter.onCoinItemClickListener = object : CoinInfoAdapter.OnCoinItemClickListener {
             override fun onCoinItemClick(coinInfo: CoinInfo) {
-                val intent = CoinDetailActivity.newIntent(
-                    this@CoinPriceListActivity,
-                    coinInfo.fromSymbol
-                )
-                startActivity(intent)
+                if (isOnePaneMode()) {
+                    launchDetailActivity(coinInfo.fromSymbol)
+                } else {
+                    launchDetailFragment(fSym = coinInfo.fromSymbol)
+                }
             }
         }
         viewModel = ViewModelProvider(this)[CoinViewModel::class.java]
         viewModel.coinInfoList.observe(this) {
             adapter.submitList(it)
         }
+    }
+
+    private fun isOnePaneMode() = binding.fragmentContainerLandscape == null
+
+    private fun launchDetailActivity(fSym: String) {
+        val intent = CoinDetailActivity.newIntent(
+            this@CoinPriceListActivity,
+            fSym
+        )
+        startActivity(intent)
+    }
+
+    private fun launchDetailFragment(fSym: String) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container_landscape, CoinDetailFragment.newInstance(fSym))
+            .addToBackStack(null)
+            .commit()
     }
 }
